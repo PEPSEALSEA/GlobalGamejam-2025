@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxDistance = 3f;
     public LayerMask groundLayer;
     public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
+    public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
 
     private Rigidbody2D rb;
     private Camera mainCamera;
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
 
         if (Input.GetMouseButtonDown(0) && isGrounded)
         {
@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         if (groundCheck != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
     }
 }
