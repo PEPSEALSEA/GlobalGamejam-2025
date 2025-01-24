@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5372090417527594734}
   - component: {fileID: 8762979635275786839}
+  - component: {fileID: 5633411689601421762}
   - component: {fileID: 8055346637008588911}
   - component: {fileID: 4779340555640676390}
   - component: {fileID: 8240228482463793577}
@@ -122,6 +123,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5633411689601421762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4111162737971209573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a7062ea8ffb1d41bee6c568e0b057a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 0
+  healthDecreaseRate: 0.3
+  healthIncreaseAmount: 20
 --- !u!114 &8055346637008588911
 MonoBehaviour:
   m_ObjectHideFlags: 0
