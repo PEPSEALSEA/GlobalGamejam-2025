@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Camera mainCamera;
     private Collider2D playerCollider;
-    private GameObject clone;
+    private Animator animator;
 
     private bool isGrounded;
 
@@ -20,11 +20,15 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         playerCollider = GetComponent<Collider2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+
+        // Update animation state
+        animator.SetBool("isGrounded", isGrounded);
 
         if (Input.GetMouseButtonDown(0) && isGrounded)
         {
@@ -38,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+
+            animator.SetTrigger("Jump"); // Trigger the jump animation
 
             StartCoroutine(DisableCollisionTemporarily());
         }
