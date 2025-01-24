@@ -1,128 +1,74 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CloudManager : MonoBehaviour
 {
     public GameObject cloudPrefab;
-    public int initialCloudCount = 10;
-    public float spawnXMin = -5f;
-    public float spawnXMax = 5f;
-    public float spawnYMin = 5f;
-    public float spawnYMax = 10f;
+    public int initialCloudCount = 20;
+    public float minYDistance = 2f;
+    public float maxYDistance = 4f;
+    public float maxXRange = 5f;
     public float cloudSpeed = 2f;
-    public float minimumDistance = 2f;
+    private Queue<GameObject> cloudQueue = new Queue<GameObject>();
 
-    private List<GameObject> cloudPool = new List<GameObject>();
-
-    private void Start()
+    void Start()
     {
         for (int i = 0; i < initialCloudCount; i++)
         {
             GameObject cloud = Instantiate(cloudPrefab);
             cloud.SetActive(false);
-            cloudPool.Add(cloud);
+            cloudQueue.Enqueue(cloud);
         }
 
-        for (int i = 0; i < initialCloudCount; i++)
-        {
-            ActivateCloud(cloudPool[i]);
-        }
+        GenerateInitialClouds();
     }
 
-    private void Update()
+    void Update()
     {
-        foreach (GameObject cloud in cloudPool)
+        foreach (var cloud in cloudQueue)
         {
             if (cloud.activeSelf)
             {
                 cloud.transform.position += Vector3.down * cloudSpeed * Time.deltaTime;
 
-                if (!IsInCameraView(cloud))
+                if (cloud.transform.position.y < Camera.main.transform.position.y - 6f)
                 {
                     cloud.SetActive(false);
+                    SpawnCloud();
                 }
             }
         }
-
-        EnsureActiveClouds();
     }
 
-    private bool IsInCameraView(GameObject cloud)
+    void GenerateInitialClouds()
     {
-        Vector3 screenPoint = Camera.main.WorldToViewportPoint(cloud.transform.position);
-        return screenPoint.y > 0;
-    }
-
-    private void EnsureActiveClouds()
-    {
-        int activeClouds = 0;
-
-        foreach (GameObject cloud in cloudPool)
+        float lastY = 0;
+        for (int i = 0; i < initialCloudCount; i++)
         {
-            if (cloud.activeSelf)
-            {
-                activeClouds++;
-            }
-        }
-
-        while (activeClouds < initialCloudCount)
-        {
-            foreach (GameObject cloud in cloudPool)
-            {
-                if (!cloud.activeSelf)
-                {
-                    ActivateCloud(cloud);
-                    activeClouds++;
-                    break;
-                }
-            }
-
-            if (activeClouds < initialCloudCount)
-            {
-                GameObject newCloud = Instantiate(cloudPrefab);
-                newCloud.SetActive(false);
-                cloudPool.Add(newCloud);
-            }
+            Vector3 newPos = GetRandomPosition(lastY);
+            lastY = newPos.y;
+            SpawnCloud(newPos);
         }
     }
 
-    private void ActivateCloud(GameObject cloud)
+    void SpawnCloud(Vector3 position = default)
     {
-        Vector3 newPosition;
-        int attempts = 0;
-        bool validPosition;
+        GameObject cloud = cloudQueue.Dequeue();
 
-        do
+        if (position == default)
         {
-            newPosition = new Vector3(
-                Random.Range(spawnXMin, spawnXMax),
-                Random.Range(spawnYMin, spawnYMax),
-                0f);
+            position = GetRandomPosition(Camera.main.transform.position.y + 10f);
+        }
 
-            validPosition = IsPositionValid(newPosition);
-
-            attempts++;
-        } while (!validPosition && attempts < 100);
-
-        cloud.transform.position = newPosition;
+        cloud.transform.position = position;
         cloud.SetActive(true);
+        cloudQueue.Enqueue(cloud);
     }
 
-    private bool IsPositionValid(Vector3 position)
+    Vector3 GetRandomPosition(float lastY)
     {
-        foreach (GameObject cloud in cloudPool)
-        {
-            if (cloud.activeSelf)
-            {
-                float yDistance = Mathf.Abs(position.y - cloud.transform.position.y);
-                if (yDistance < minimumDistance)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
+        float randomX = Random.Range(-maxXRange, maxXRange);
+        float randomY = lastY + Random.Range(minYDistance, maxYDistance);
+        return new Vector3(randomX, randomY, 0f);
     }
-
-
 }
