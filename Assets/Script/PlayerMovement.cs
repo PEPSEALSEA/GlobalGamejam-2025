@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float baseJumpForce = 5f; // Base force for movement
-    public float maxDistance = 3f; // Maximum distance that affects jump force
-    public LayerMask groundLayer; // Layer considered as ground
-    public Transform groundCheck; // Ground check position
-    public float groundCheckRadius = 0.2f; // Radius for ground check
+    public float baseJumpForce = 5f;
+    public float maxDistance = 3f;
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
 
     private Rigidbody2D rb;
     private Camera mainCamera;
@@ -26,21 +26,16 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Check for mouse click and grounded state
         if (Input.GetMouseButtonDown(0) && isGrounded)
         {
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-            // Calculate direction from player to mouse position
             Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
 
-            // Clamp the distance for consistent force
             float distance = Mathf.Clamp(Vector2.Distance(mousePosition, transform.position), 0, maxDistance);
 
-            // Calculate force based on distance
             float jumpForce = baseJumpForce * (distance / maxDistance);
 
-            // Reset velocity and apply force toward the mouse position
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
 
