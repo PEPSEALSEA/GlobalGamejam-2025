@@ -5,12 +5,27 @@ using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; } // Singleton
+
     public TMP_Text scoreText;
     public float timeInterval = 0.001f;
     public int scorePerInterval = 1;
 
     private int currentScore = 0;
     private int displayedScore = 0;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -65,8 +80,13 @@ public class GameManager : MonoBehaviour
         scoreText.text = $"Score: {animatedText}";
     }
 
-    void UpdateScoreUI()
+    public void AddHealth(int amount)
     {
-        scoreText.text = $"Score: {displayedScore}";
+        Debug.Log($"Health increased by {amount}!");
+    }
+
+    public void AddScore(int amount)
+    {
+        currentScore += amount;
     }
 }
