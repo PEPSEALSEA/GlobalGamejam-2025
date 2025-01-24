@@ -152,7 +152,7 @@ MonoBehaviour:
   - {fileID: 867769055}
   - {fileID: 853700786}
   - {fileID: 2074762515}
-  initialCloudCount: 14
+  initialCloudCount: 10
   minYDistance: 1
   maxYDistance: 2.3
   maxXRange: 2.32
