@@ -10,18 +10,21 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Camera mainCamera;
-
+    private Collider2D playerCollider;
     private GameObject clone;
+
+    private bool isGrounded;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
+        playerCollider = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && isGrounded)
         {
@@ -34,9 +37,35 @@ public class PlayerMovement : MonoBehaviour
 
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+
+            StartCoroutine(DisableCollisionTemporarily());
         }
 
         HandleMirroring();
+    }
+
+    private System.Collections.IEnumerator DisableCollisionTemporarily()
+    {
+        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), true);
+
+        while (rb.linearVelocity.y > 0)
+        {
+            yield return null;
+        }
+
+        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), false);
+    }
+
+    private int LayerMaskToLayer(LayerMask layerMask)
+    {
+        int layer = 0;
+        int bitmask = layerMask.value;
+        while (bitmask > 1)
+        {
+            bitmask >>= 1;
+            layer++;
+        }
+        return layer;
     }
 
     void HandleMirroring()
