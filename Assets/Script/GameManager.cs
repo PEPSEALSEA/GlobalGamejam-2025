@@ -29,10 +29,40 @@ public class GameManager : MonoBehaviour
                 DOTween.To(() => displayedScore, x =>
                 {
                     displayedScore = x;
-                    UpdateScoreUI();
+                    UpdateScoreUIWithSlotEffect(x);
                 }, currentScore, 0.5f).SetId("ScoreAnimation");
             }
         }
+    }
+
+    void UpdateScoreUIWithSlotEffect(int targetScore)
+    {
+        string targetScoreString = targetScore.ToString();
+        string displayedScoreString = displayedScore.ToString();
+
+        int maxLength = Mathf.Max(targetScoreString.Length, displayedScoreString.Length);
+        targetScoreString = targetScoreString.PadLeft(maxLength, '0');
+        displayedScoreString = displayedScoreString.PadLeft(maxLength, '0');
+
+        string animatedText = "";
+
+        for (int i = 0; i < maxLength; i++)
+        {
+            int currentDigit = displayedScoreString[i] - '0';
+            int targetDigit = targetScoreString[i] - '0';
+
+            if (currentDigit != targetDigit)
+            {
+                int rollingDigit = (currentDigit + Random.Range(1, 10)) % 10;
+                animatedText += rollingDigit.ToString();
+            }
+            else
+            {
+                animatedText += targetDigit.ToString();
+            }
+        }
+
+        scoreText.text = $"Score: {animatedText}";
     }
 
     void UpdateScoreUI()

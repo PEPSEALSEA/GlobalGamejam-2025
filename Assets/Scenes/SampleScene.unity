@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1545897822}
-  timeInterval: 0.001
+  timeInterval: 0.1
   scorePerInterval: 1
 --- !u!1 &519420028
 GameObject:
@@ -419,6 +419,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4111162737971209573, guid: 90695cbd16572544d8c2c9fe6ea36738, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4111162737971209573, guid: 90695cbd16572544d8c2c9fe6ea36738, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4779340555640676390, guid: 90695cbd16572544d8c2c9fe6ea36738, type: 3}
@@ -973,8 +977,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -205.08861, y: 1560.7184}
-  m_SizeDelta: {x: 2208.835, y: 152.5422}
+  m_AnchoredPosition: {x: -205.08861, y: 1492.6472}
+  m_SizeDelta: {x: 2208.835, y: 288.6843}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1545897822
 MonoBehaviour:
@@ -1023,8 +1027,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 135
-  m_fontSizeBase: 135
+  m_fontSize: 185.93
+  m_fontSizeBase: 185.93
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

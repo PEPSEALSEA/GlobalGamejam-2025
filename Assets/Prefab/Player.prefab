@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 8240228482463793577}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,13 +134,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da33e327c05d84ee689f18688d2ba64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseJumpForce: 12
+  baseJumpForce: 17.1
   maxDistance: 3
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   groundCheck: {fileID: 8298452727541371852}
-  groundCheckRadius: 0.2
+  groundCheckSize: {x: 1, y: 0.3}
 --- !u!50 &4779340555640676390
 Rigidbody2D:
   serializedVersion: 5
@@ -167,7 +167,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &8240228482463793577
 BoxCollider2D:
   m_ObjectHideFlags: 0
