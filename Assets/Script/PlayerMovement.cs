@@ -2,70 +2,46 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float baseJumpForce = 5f;
-    public float maxDistance = 3f;
-    public LayerMask groundLayer;
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
+    public float baseJumpForce = 5f; // Base force for movement
+    public float maxDistance = 3f; // Maximum distance that affects jump force
+    public LayerMask groundLayer; // Layer considered as ground
+    public Transform groundCheck; // Ground check position
+    public float groundCheckRadius = 0.2f; // Radius for ground check
 
-    private Rigidbody2D rb;
-    private Camera mainCamera;
-    private Collider2D playerCollider;
-    private GameObject clone;
-
-    private bool isGrounded;
+    private Rigidbody2D rb; // Reference to Rigidbody2D
+    private Camera mainCamera; // Main camera reference
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
-        playerCollider = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Check if the player is grounded
+        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && isGrounded)
+        // Check for mouse click and grounded state
+        if (Input.GetMouseButtonDown(0) && isGrounded)
         {
-            Vector2 touchPosition = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position);
+            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-            Vector2 direction = (touchPosition - (Vector2)transform.position).normalized;
-            float distance = Mathf.Clamp(Vector2.Distance(touchPosition, transform.position), 0, maxDistance);
+            // Calculate direction from player to mouse position
+            Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
 
+            // Clamp the distance for consistent force
+            float distance = Mathf.Clamp(Vector2.Distance(mousePosition, transform.position), 0, maxDistance);
+
+            // Calculate force based on distance
             float jumpForce = baseJumpForce * (distance / maxDistance);
 
-            rb.linearVelocity = Vector2.zero;
+            // Reset velocity and apply force toward the mouse position
+            rb.velocity = Vector2.zero;
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
-
-            StartCoroutine(DisableCollisionTemporarily());
         }
 
         HandleMirroring();
-    }
-
-    private System.Collections.IEnumerator DisableCollisionTemporarily()
-    {
-        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), true);
-
-        while (rb.linearVelocity.y > 0)
-        {
-            yield return null;
-        }
-
-        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), false);
-    }
-
-    private int LayerMaskToLayer(LayerMask layerMask)
-    {
-        int layer = 0;
-        int bitmask = layerMask.value;
-        while (bitmask > 1)
-        {
-            bitmask >>= 1;
-            layer++;
-        }
-        return layer;
     }
 
     void HandleMirroring()
@@ -77,24 +53,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (isOffLeft || isOffRight)
         {
-            if (clone == null)
-            {
-                clone = Instantiate(gameObject, transform.position, transform.rotation);
-                Destroy(clone.GetComponent<PlayerMovement>());
-            }
-
-            Vector3 clonePosition = transform.position;
+            Vector3 position = transform.position;
 
             if (isOffLeft)
-                clonePosition.x += mainCamera.orthographicSize * 2 * mainCamera.aspect;
+                position.x += mainCamera.orthographicSize * 2 * mainCamera.aspect;
             else if (isOffRight)
-                clonePosition.x -= mainCamera.orthographicSize * 2 * mainCamera.aspect;
+                position.x -= mainCamera.orthographicSize * 2 * mainCamera.aspect;
 
-            clone.transform.position = clonePosition;
-        }
-        else if (clone != null)
-        {
-            Destroy(clone);
+            transform.position = position;
         }
     }
 
