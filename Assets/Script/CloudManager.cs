@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class CloudManager : MonoBehaviour
 {
-    public GameObject cloudPrefab;
+    public GameObject[] cloudPrefabs;
     public int initialCloudCount = 20;
     public float minYDistance = 2f;
     public float maxYDistance = 4f;
@@ -15,7 +15,7 @@ public class CloudManager : MonoBehaviour
     {
         for (int i = 0; i < initialCloudCount; i++)
         {
-            GameObject cloud = Instantiate(cloudPrefab);
+            GameObject cloud = Instantiate(cloudPrefabs[Random.Range(0, cloudPrefabs.Length)]);
             cloud.SetActive(false);
             cloudQueue.Enqueue(cloud);
         }
