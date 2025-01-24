@@ -8,19 +8,23 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck; // Ground check position
     public float groundCheckRadius = 0.2f; // Radius for ground check
 
-    private Rigidbody2D rb; // Reference to Rigidbody2D
-    private Camera mainCamera; // Main camera reference
+    private Rigidbody2D rb;
+    private Camera mainCamera;
+    private Collider2D playerCollider;
+    private GameObject clone;
+
+    private bool isGrounded;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
+        playerCollider = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        // Check if the player is grounded
-        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         // Check for mouse click and grounded state
         if (Input.GetMouseButtonDown(0) && isGrounded)
@@ -37,11 +41,37 @@ public class PlayerMovement : MonoBehaviour
             float jumpForce = baseJumpForce * (distance / maxDistance);
 
             // Reset velocity and apply force toward the mouse position
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+
+            StartCoroutine(DisableCollisionTemporarily());
         }
 
         HandleMirroring();
+    }
+
+    private System.Collections.IEnumerator DisableCollisionTemporarily()
+    {
+        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), true);
+
+        while (rb.linearVelocity.y > 0)
+        {
+            yield return null;
+        }
+
+        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), false);
+    }
+
+    private int LayerMaskToLayer(LayerMask layerMask)
+    {
+        int layer = 0;
+        int bitmask = layerMask.value;
+        while (bitmask > 1)
+        {
+            bitmask >>= 1;
+            layer++;
+        }
+        return layer;
     }
 
     void HandleMirroring()
