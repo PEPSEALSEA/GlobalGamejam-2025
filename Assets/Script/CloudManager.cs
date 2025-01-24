@@ -25,7 +25,9 @@ public class CloudManager : MonoBehaviour
 
     void Update()
     {
-        foreach (var cloud in cloudQueue)
+        List<GameObject> activeClouds = new List<GameObject>(cloudQueue);
+
+        foreach (var cloud in activeClouds)
         {
             if (cloud.activeSelf)
             {
