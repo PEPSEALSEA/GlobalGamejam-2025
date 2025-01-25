@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Playables; // Required for PlayableDirector
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerHealth : MonoBehaviour
     public float currentHealth;
     public float healthDecreaseRate = 1f;
     public float healthIncreaseAmount = 20f;
+    public PlayableDirector timeline; // Public variable for timeline
+
 
     private Animator animator; // Reference to the Animator component
     private PlayerMovement playerMovement; // Reference to PlayerMovement
@@ -105,37 +108,57 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.DOValue(currentHealth, 0.5f).SetEase(Ease.InOutSine);
     }
 
-    private void Die()
+private void Die()
+{
+    Debug.Log("Player has died!");
+
+    // Ensure this is executed only once
+    if (isDead) return;
+    isDead = true; // Set the death flag
+
+    // Trigger death animation
+    if (animator != null)
     {
-        Debug.Log("Player has died!");
-
-        // Ensure this is executed only once
-
-        // Trigger death animation
-        if (animator != null)
-        {
-            animator.SetTrigger("Dead");
-            if (isDead) return;
-            isDead = true; // Set the death flag
-        }
-
-        // Disable PlayerMovement component
-        if (playerMovement != null)
-        {
-            playerMovement.enabled = false;
-        }
-
-        // Delete Rigidbody2D component
-        if (rb != null)
-        {
-            Destroy(rb);
-            Debug.Log("Rigidbody2D component removed.");
-        }
-
-        GameManager.Instance.ToggleScoreAddition(false);
-        CloudManager.Instance.cloudSpeed = 0f;
-        // Additional death logic can be added here
+        animator.SetTrigger("Dead");
+        animator.SetBool("isDead", true);
     }
+
+    // Disable PlayerMovement component
+    if (playerMovement != null)
+    {
+        playerMovement.enabled = false;
+    }
+
+    // Delete Rigidbody2D component
+    if (rb != null)
+    {
+        Destroy(rb);
+        Debug.Log("Rigidbody2D component removed.");
+    }
+
+    // Stop adding scores
+    GameManager.Instance.ToggleScoreAddition(false);
+
+    // Stop cloud movement
+    CloudManager.Instance.cloudSpeed = 0f;
+
+    // Delay 2 seconds, then play the timeline
+    DOVirtual.DelayedCall(2f, PlayTimeline);
+}
+
+    private void PlayTimeline()
+    {
+        Debug.Log("Play timeline");
+        if (timeline != null)
+        {
+            timeline.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No PlayableDirector assigned to play the timeline.");
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
