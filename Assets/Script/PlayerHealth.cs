@@ -110,14 +110,13 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player has died!");
 
         // Ensure this is executed only once
-        if (isDead) return;
-
-        isDead = true; // Set the death flag
 
         // Trigger death animation
         if (animator != null)
         {
-            animator.SetBool("isDead", true);
+            animator.SetTrigger("Dead");
+            if (isDead) return;
+            isDead = true; // Set the death flag
         }
 
         // Disable PlayerMovement component
