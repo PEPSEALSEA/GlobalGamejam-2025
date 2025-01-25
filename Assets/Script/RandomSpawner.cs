@@ -20,7 +20,7 @@ public class RandomSpawner : MonoBehaviour
     {
         while (true)
         {
-            spawnInterval = Random.Range(60f, 120f);
+            spawnInterval = Random.Range(10f, 20f);
             yield return new WaitForSeconds(spawnInterval);
 
             if (currentSpawnedObject != null)

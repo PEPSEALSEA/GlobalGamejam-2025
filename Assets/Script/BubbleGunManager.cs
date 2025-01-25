@@ -50,7 +50,7 @@ public class BubbleGunManager : MonoBehaviour
         if (spawnTimer <= 0)
         {
             SpawnBubble();
-            spawnTimer = Random.Range(20f, 30f); // Reset the spawn timer for the next bubble
+            spawnTimer = Random.Range(5f, 10f); // Reset the spawn timer for the next bubble
         }
 
         // Move active bubbles down like clouds
