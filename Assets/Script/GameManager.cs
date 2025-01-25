@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,17 @@ public class GameManager : MonoBehaviour
     public float timeInterval = 0.001f;
     public int scorePerInterval = 1;
 
-    private int currentScore = 0;
+    public event Action<int> OnScoreUpdated;
+    private int currentScore;
+    public int CurrentScore
+    {
+        get => currentScore;
+        set
+        {
+            currentScore = value;
+            OnScoreUpdated?.Invoke(currentScore);
+        }
+    }
     private int displayedScore = 0;
 
     private void Awake()
@@ -68,7 +79,7 @@ public class GameManager : MonoBehaviour
 
             if (currentDigit != targetDigit)
             {
-                int rollingDigit = (currentDigit + Random.Range(1, 10)) % 10;
+                int rollingDigit = (currentDigit + 5) % 10;
                 animatedText += rollingDigit.ToString();
             }
             else

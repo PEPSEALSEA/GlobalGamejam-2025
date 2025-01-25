@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyWorn : BaseEnemy
 {
-    private readonly string[] slideAnimations = { "Slide1", "Slide2", "Slide3", "Slide4", "Slide5", "Slide6", "Slide7", "Slide8", "Slide9", "Slide10", "Slide11", "Slide12" };
+    private readonly string[] slideAnimations = { "Slide1", "Slide2", "Slide3", "Slide4", "Slide5", "Slide6" };
 
     [SerializeField] private GameObject redLine;
     [SerializeField] private float lineDisplayDuration = 0.5f;
