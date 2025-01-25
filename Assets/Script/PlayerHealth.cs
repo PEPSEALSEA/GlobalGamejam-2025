@@ -139,12 +139,15 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Handle collision with health-increasing objects
         if (other.gameObject.CompareTag("Bubblegum"))
         {
             AddHealth(healthIncreaseAmount);
-            other.gameObject.SetActive(false); // Deactivate the object
-            // Optionally, play a collection animation here
+
+            other.transform.DOScale(Vector3.zero, 0.5f)
+                .OnComplete(() =>
+                {
+                    Destroy(other.gameObject);
+                });
         }
     }
 }
