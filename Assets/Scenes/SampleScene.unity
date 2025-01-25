@@ -648,7 +648,7 @@ GameObject:
   - component: {fileID: 712855522}
   m_Layer: 0
   m_Name: BubbleGum
-  m_TagString: Untagged
+  m_TagString: Bubblegum
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -928,6 +928,10 @@ PrefabInstance:
       propertyPath: healthSlider
       value: 
       objectReference: {fileID: 1257825106}
+    - target: {fileID: 5633411689601421762, guid: 90695cbd16572544d8c2c9fe6ea36738, type: 3}
+      propertyPath: healthDecreaseRate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8055346637008588911, guid: 90695cbd16572544d8c2c9fe6ea36738, type: 3}
       propertyPath: baseJumpForce
       value: 12
