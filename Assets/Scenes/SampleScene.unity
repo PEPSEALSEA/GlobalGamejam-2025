@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 51937933}
+  - component: {fileID: 51937935}
   - component: {fileID: 51937934}
   - component: {fileID: 51937932}
   m_Layer: 0
@@ -136,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &51937932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +189,22 @@ MonoBehaviour:
   scoreText: {fileID: 1545897822}
   timeInterval: 0.1
   scorePerInterval: 1
+--- !u!114 &51937935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51937931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7b8a3a0d2ff644684e9ea9f2c8ce00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyObject:
+  - {fileID: 6772282381601147115, guid: 1bb91de7424d0404b86f581075191962, type: 3}
+  minTime: 10
+  maxTime: 20
 --- !u!1 &54887998
 GameObject:
   m_ObjectHideFlags: 0
