@@ -9,6 +9,9 @@ public class EnemyWorn : BaseEnemy
 
     private void OnEnable()
     {
+        // Increase vignette intensity before playing the animation
+        VignetteIntensityController.Instance.IncressVignetteIntensity();
+
         string randomSlideAnim = slideAnimations[Random.Range(0, slideAnimations.Length)];
         animator.Play(randomSlideAnim, 0, 0f);
         animator.speed = 0;
@@ -42,6 +45,9 @@ public class EnemyWorn : BaseEnemy
         {
             yield return null;
         }
+
+        // Decrease vignette intensity after the animation ends
+        VignetteIntensityController.Instance.DecreaseVignetteIntensity();
 
         gameObject.SetActive(false);
     }
