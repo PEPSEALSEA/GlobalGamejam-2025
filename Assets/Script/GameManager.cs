@@ -1,8 +1,9 @@
-using System.Collections;
-using UnityEngine;
-using TMPro;
 using DG.Tweening;
 using System;
+using TMPro;
+using UnityEngine;
+using System.Collections;
+using System.Security.Cryptography;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     private int lastPopupScore = 0;
 
     private bool canAddScore = true;
+    private bool isBonusTime = false; // New boolean for Bonus Time
 
     private void Awake()
     {
@@ -49,7 +51,8 @@ public class GameManager : MonoBehaviour
 
             if (canAddScore)
             {
-                currentScore += scorePerInterval;
+                int scoreToAdd = isBonusTime ? scorePerInterval * 2 : scorePerInterval; // Double score during Bonus Time
+                currentScore += scoreToAdd;
 
                 if (!DOTween.IsTweening("ScoreAnimation"))
                 {
@@ -66,6 +69,32 @@ public class GameManager : MonoBehaviour
                     TriggerScorePopup();
                 }
             }
+        }
+    }
+
+    public void ToggleBonusTime(bool enable)
+    {
+        isBonusTime = enable;
+
+        if (enable)
+        {
+            // Golden text animation
+            Color originalColor = scoreText.color;
+
+            scoreText.DOColor(Color.yellow, 0.3f).OnComplete(() =>
+            {
+                scoreText.DOColor(originalColor, 0.3f).SetLoops(-1, LoopType.Yoyo).SetId("BonusTimeColor");
+            });
+
+            scoreText.transform.DOScale(scoreText.transform.localScale * 1.5f, 0.3f).SetLoops(-1, LoopType.Yoyo).SetId("BonusTimeScale");
+        }
+        else
+        {
+            // Reset text animation
+            DOTween.Kill("BonusTimeColor");
+            DOTween.Kill("BonusTimeScale");
+            scoreText.color = Color.white; // Reset to original color
+            scoreText.transform.localScale = Vector3.one; // Reset to original scale
         }
     }
 
@@ -99,7 +128,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = $"Score: {animatedText}";
     }
 
-    void TriggerScorePopup()
+    public void TriggerScorePopup()
     {
         Vector3 originalScale = scoreText.transform.localScale;
 
@@ -119,27 +148,12 @@ public class GameManager : MonoBehaviour
         scoreText.transform.DOShakePosition(0.3f, new Vector3(5f, 5f, 0), 10, 90);
     }
 
-    void NormalScoreAnimation()
-    {
-        Vector3 originalScale = scoreText.transform.localScale;
-
-        scoreText.transform.DOScale(originalScale * 1.2f, 0.2f)
-            .OnComplete(() =>
-            {
-                scoreText.transform.DOScale(originalScale, 0.2f);
-            });
-    }
-
-    public void AddHealth(int amount)
-    {
-        Debug.Log($"Health increased by {amount}!");
-    }
-
     public void AddScore(int amount)
     {
         if (canAddScore)
         {
-            currentScore += amount;
+            int scoreToAdd = isBonusTime ? amount * 2 : amount; // Double score during Bonus Time
+            currentScore += scoreToAdd;
 
             if (currentScore >= lastPopupScore + 100)
             {
@@ -151,11 +165,6 @@ public class GameManager : MonoBehaviour
                 NormalScoreAnimation();
             }
         }
-    }
-
-    public void ToggleScoreAddition(bool allowScore)
-    {
-        canAddScore = allowScore;
     }
 
     public void RemoveScore(int amount)
@@ -189,6 +198,29 @@ public class GameManager : MonoBehaviour
             }, currentScore, 0.5f).SetId("ScoreAnimation");
         }
     }
+
+    void NormalScoreAnimation()
+    {
+        Vector3 originalScale = scoreText.transform.localScale;
+
+        scoreText.transform.DOScale(originalScale * 1.2f, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.transform.DOScale(originalScale, 0.2f);
+            });
+    }
+
+    public void AddHealth(int amount)
+    {
+        Debug.Log($"Health increased by {amount}!");
+    }
+
+    public void ToggleScoreAddition(bool allowScore)
+    {
+        canAddScore = allowScore;
+    }
+
+
     #region SaveBestScore
     public void SaveBestScore()
     {
