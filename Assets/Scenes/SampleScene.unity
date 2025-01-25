@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &51937932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,8 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911e9f8ea28964b03838c246c7aa6b61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activateButton: {fileID: 0}
-  timeline: {fileID: 0}
+  activateButton: {fileID: 1191010144}
+  timeline: {fileID: 669349838}
 --- !u!4 &54888000
 Transform:
   m_ObjectHideFlags: 0
@@ -689,6 +689,14 @@ PlayableDirector:
     value: {fileID: 1191010142}
   - key: {fileID: 7528304792230103155, guid: fc4596c978fe149e291b92586c19b43e, type: 2}
     value: {fileID: 1180515749}
+  - key: {fileID: -7960728305925051855, guid: fc4596c978fe149e291b92586c19b43e, type: 2}
+    value: {fileID: 1492351246}
+  - key: {fileID: 9059534921178347098, guid: fc4596c978fe149e291b92586c19b43e, type: 2}
+    value: {fileID: 51937931}
+  - key: {fileID: 2335905003320211761, guid: fc4596c978fe149e291b92586c19b43e, type: 2}
+    value: {fileID: 1321707194}
+  - key: {fileID: 4783569451794628954, guid: fc4596c978fe149e291b92586c19b43e, type: 2}
+    value: {fileID: 1236293444}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &669349839
@@ -1996,8 +2004,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 1, g: 1, b: 1, a: 1}
-  glowBrightness: 2.63
+  glowColor: {r: 1, g: 0.58756924, b: 0.5424528, a: 1}
+  glowBrightness: 4.6
   outlineWidth: 1
   alphaThreshold: 0.01
   drawOutside: 0
@@ -2575,7 +2583,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_Sprite: {fileID: 802384095007527229, guid: bc1e737bc62a145c7b7a6dc3a7b5297e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
