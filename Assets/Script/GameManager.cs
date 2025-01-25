@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         gameObject.SetActive(false);
+        int bestScore = LoadBestScore();
+        scoreText.text = $"Best Score: {bestScore}";
     }
 
     void Start()
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateScoreUIWithSlotEffect(int targetScore)
+    public void UpdateScoreUIWithSlotEffect(int targetScore)
     {
         string targetScoreString = targetScore.ToString();
         string displayedScoreString = displayedScore.ToString();
@@ -128,6 +130,14 @@ public class GameManager : MonoBehaviour
             });
     }
 
+    
+
+
+    public void AddHealth(int amount)
+    {
+        Debug.Log($"Health increased by {amount}!");
+    }
+
     public void AddScore(int amount)
     {
         if (canAddScore)
@@ -145,13 +155,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
-    public void AddHealth(int amount)
-    {
-        Debug.Log($"Health increased by {amount}!");
-    }
-
 
     public void ToggleScoreAddition(bool allowScore)
     {
@@ -189,5 +192,23 @@ public class GameManager : MonoBehaviour
             }, currentScore, 0.5f).SetId("ScoreAnimation");
         }
     }
+    #region SaveBestScore
+    public void SaveBestScore()
+    {
+        int bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        if (currentScore > bestScore)
+        {
+            PlayerPrefs.SetInt("BestScore", currentScore);
+            PlayerPrefs.Save();
+            Debug.Log($"New Best Score: {currentScore}");
+        }
 
+        PlayerPrefs.SetInt("LastScore", currentScore);
+    }
+
+    public int LoadBestScore()
+    {
+        return PlayerPrefs.GetInt("BestScore", 0);
+    }
+    #endregion
 }

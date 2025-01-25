@@ -83,6 +83,8 @@ public class PlayerHealth : MonoBehaviour
            0.5f)
        .SetEase(Ease.InOutSine);
         GameManager.Instance.ToggleScoreAddition(false);
+        GameManager.Instance.UpdateScoreUIWithSlotEffect(GameManager.Instance.currentScore);
+        GameManager.Instance.SaveBestScore();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
