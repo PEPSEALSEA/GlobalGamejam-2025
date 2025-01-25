@@ -6,24 +6,17 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; } // Singleton
+    public static GameManager Instance { get; private set; }
 
     public TMP_Text scoreText;
     public float timeInterval = 0.001f;
     public int scorePerInterval = 1;
 
     public event Action<int> OnScoreUpdated;
-    private int currentScore;
-    public int CurrentScore
-    {
-        get => currentScore;
-        set
-        {
-            currentScore = value;
-            OnScoreUpdated?.Invoke(currentScore);
-        }
-    }
+    public int currentScore;
+
     private int displayedScore = 0;
+    private int lastPopupScore = 0;
 
     private void Awake()
     {
@@ -34,7 +27,6 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -57,6 +49,12 @@ public class GameManager : MonoBehaviour
                     displayedScore = x;
                     UpdateScoreUIWithSlotEffect(x);
                 }, currentScore, 0.5f).SetId("ScoreAnimation");
+            }
+
+            if (currentScore >= lastPopupScore + 100)
+            {
+                lastPopupScore = currentScore;
+                TriggerScorePopup();
             }
         }
     }
@@ -91,6 +89,24 @@ public class GameManager : MonoBehaviour
         scoreText.text = $"Score: {animatedText}";
     }
 
+    void TriggerScorePopup()
+    {
+        Vector3 originalScale = scoreText.transform.localScale;
+
+        scoreText.transform.DOScale(originalScale * 1.5f, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.transform.DOScale(originalScale, 0.2f);
+            });
+
+        Color originalColor = scoreText.color;
+        scoreText.DOColor(Color.yellow, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.DOColor(originalColor, 0.2f);
+            });
+    }
+
     public void AddHealth(int amount)
     {
         Debug.Log($"Health increased by {amount}!");
@@ -99,5 +115,11 @@ public class GameManager : MonoBehaviour
     public void AddScore(int amount)
     {
         currentScore += amount;
+
+        if (currentScore >= lastPopupScore + 100)
+        {
+            lastPopupScore = currentScore;
+            TriggerScorePopup();
+        }
     }
 }
