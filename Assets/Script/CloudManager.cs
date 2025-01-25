@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class CloudManager : MonoBehaviour
 {
+    public static CloudManager Instance { get; private set; } // Singleton
+
     public GameObject[] cloudPrefabs;
     public int initialCloudCount = 20;
     public float minYDistance = 2f;
@@ -10,6 +12,18 @@ public class CloudManager : MonoBehaviour
     public float maxXRange = 5f;
     public float cloudSpeed = 2f;
     private Queue<GameObject> cloudQueue = new Queue<GameObject>();
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
