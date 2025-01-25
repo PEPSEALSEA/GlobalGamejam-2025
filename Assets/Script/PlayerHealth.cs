@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement playerMovement; // Reference to PlayerMovement
     private Rigidbody2D rb; // Reference to Rigidbody2D
     private bool isDead = false; // Flag to track death state
-
+    public G
     private void Awake()
     {
         // Singleton setup
@@ -135,6 +135,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         GameManager.Instance.ToggleScoreAddition(false);
+        CloudManager.Instance.cloudSpeed = 0f;
         // Additional death logic can be added here
     }
 
