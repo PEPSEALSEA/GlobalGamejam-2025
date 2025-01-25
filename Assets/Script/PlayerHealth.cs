@@ -90,7 +90,9 @@ public class PlayerHealth : MonoBehaviour
         if (other.gameObject.CompareTag("Bubblegum"))
         {
             AddHealth(healthIncreaseAmount);
-            //Destroy(other.gameObject); or Play anim
+            other.gameObject.SetActive(false);
+            //Destroy(other.gameObject);
+            //or playanim
         }
     }
 }
