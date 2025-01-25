@@ -15,7 +15,6 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement playerMovement; // Reference to PlayerMovement
     private Rigidbody2D rb; // Reference to Rigidbody2D
     private bool isDead = false; // Flag to track death state
-    public G
     private void Awake()
     {
         // Singleton setup
