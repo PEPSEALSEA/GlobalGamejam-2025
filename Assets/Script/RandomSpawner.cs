@@ -7,6 +7,8 @@ public class RandomSpawner : MonoBehaviour
     public Vector2 spawnAreaMin;
     public Vector2 spawnAreaMax;
     public Color gizmoColor = Color.green;
+    public float minSec = 10f;
+    public float maxSec = 20f;
 
     private GameObject currentSpawnedObject;
     private float spawnInterval;
@@ -20,7 +22,7 @@ public class RandomSpawner : MonoBehaviour
     {
         while (true)
         {
-            spawnInterval = Random.Range(10f, 20f);
+            spawnInterval = Random.Range(minSec, minSec);
             yield return new WaitForSeconds(spawnInterval);
 
             if (currentSpawnedObject != null)

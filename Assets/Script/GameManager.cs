@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
                 scoreText.DOColor(originalColor, 0.3f).SetLoops(-1, LoopType.Yoyo).SetId("BonusTimeColor");
             });
 
-            scoreText.transform.DOScale(scoreText.transform.localScale * 1.5f, 0.3f).SetLoops(-1, LoopType.Yoyo).SetId("BonusTimeScale");
+            scoreText.transform.DOScale(scoreText.transform.localScale * 1.05f, 0.3f).SetLoops(-1, LoopType.Yoyo).SetId("BonusTimeScale");
         }
         else
         {

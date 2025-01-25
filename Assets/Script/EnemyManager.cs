@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public static EnemyManager Instance { get; private set; }
     [Header("Random Spawn Enemy")]
     public List<GameObject> enemyObject = new List<GameObject>();
 
@@ -13,6 +14,18 @@ public class EnemyManager : MonoBehaviour
 
     private bool isSpawning = true;
     private Coroutine spawnCoroutine;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {

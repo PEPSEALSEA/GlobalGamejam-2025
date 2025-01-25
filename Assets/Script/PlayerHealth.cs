@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Playables; // Required for PlayableDirector
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -18,6 +19,17 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement playerMovement; // Reference to PlayerMovement
     private Rigidbody2D rb; // Reference to Rigidbody2D
     private bool isDead = false; // Flag to track death state
+
+    [Header("BoostSpeed")]
+    public float defaultSpeed = 2f;  // Default cloud speed
+    public float boostedSpeed = 5f; // Boosted speed value
+    public float toggleDuration = 5f; // Duration for the speed effect
+
+    private Transform targetObject; // The object this bubble sticks to
+    private Rigidbody2D playerRigidbody; // Player's Rigidbody2D
+    private Collider2D playerCollider;
+    private bool originalGravityState;
+
     private void Awake()
     {
         // Singleton setup
@@ -173,11 +185,65 @@ private void Die()
                 });
         }
 
-        if(other.gameObject.CompareTag("SpeedBubble"))
+        if (other.gameObject.CompareTag("SpeedBubble"))
         {
-            //this object is stick to the center of the other object.
-            //CloudManager.Instance.cloudSpeed = 5f; i want using dotween for lerp to 5 and lerp back to defaut before it change
-            GameManager.Instance.ToggleBonusTime(true);
+            targetObject = other.transform;
+            playerRigidbody = GetComponent<Rigidbody2D>();
+            playerCollider = GetComponent<Collider2D>();
+
+            if (playerRigidbody != null)
+            {
+                StartCoroutine(ApplySpeedBoost());
+            }
         }
+    }
+
+    public IEnumerator ApplySpeedBoost()
+    {
+        originalGravityState = playerRigidbody.gravityScale > 0;
+        playerRigidbody.gravityScale = 0;
+        playerRigidbody.linearVelocity = Vector2.zero;
+        playerRigidbody.isKinematic = true;
+        playerCollider.enabled = false;
+
+        EnemyManager.Instance.StopSpawner();
+
+        transform.SetParent(targetObject);
+        transform.localPosition = Vector3.zero;
+
+        float originalSpeed = CloudManager.Instance.cloudSpeed;
+        float boostedSpeed = originalSpeed * 5f; // 5x the current speed
+
+        DOTween.To(() => CloudManager.Instance.cloudSpeed,
+               x => CloudManager.Instance.cloudSpeed = x,
+               boostedSpeed,
+               1f);
+
+        GameManager.Instance.ToggleBonusTime(true);
+
+        yield return new WaitForSeconds(toggleDuration);
+
+        DOTween.To(() => CloudManager.Instance.cloudSpeed,
+               x => CloudManager.Instance.cloudSpeed = x,
+               originalSpeed,
+               1f);
+
+        GameManager.Instance.ToggleBonusTime(false);
+
+        EnemyManager.Instance.StartSpawner();
+
+        CloudManager.Instance.cloudSpeed = 2f;
+
+        playerRigidbody.isKinematic = false;
+        playerCollider.enabled = true;
+        playerRigidbody.gravityScale = 2f;
+
+        transform.SetParent(null);
+
+        targetObject.DOScale(Vector3.zero, 0.5f)
+        .OnComplete(() =>
+        {
+            Destroy(targetObject.gameObject);
+        });
     }
 }
