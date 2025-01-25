@@ -130,9 +130,6 @@ public class GameManager : MonoBehaviour
             });
     }
 
-    
-
-
     public void AddHealth(int amount)
     {
         Debug.Log($"Health increased by {amount}!");
