@@ -149,5 +149,12 @@ public class PlayerHealth : MonoBehaviour
                     Destroy(other.gameObject);
                 });
         }
+
+        if(other.gameObject.CompareTag("SpeedBubble"))
+        {
+            //this object is stick to the center of the other object.
+            //CloudManager.Instance.cloudSpeed = 5f; i want using dotween for lerp to 5 and lerp back to defaut before it change
+            GameManager.Instance.ToggleBonusTime(true);
+        }
     }
 }
