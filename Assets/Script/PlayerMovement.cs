@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     public Transform groundCheck;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
+    public int maxJumps = 2; // Max number of jumps (e.g., 2 for double jump)
 
     private Rigidbody2D rb;
     private Camera mainCamera;
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer; // To handle sprite flipping
 
+    private int currentJumps = 0; // Track current jumps
     private bool isGrounded;
 
     void Start()
@@ -30,12 +32,20 @@ public class PlayerMovement : MonoBehaviour
         // Check if the player is grounded
         isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
 
+        // Reset jumps when grounded
+        if (isGrounded && currentJumps > 0)
+        {
+            currentJumps = 0;
+        }
+
         // Update animator parameters
         animator.SetBool("isGrounded", isGrounded);
 
         // Jump logic
-        if (Input.GetMouseButtonDown(0) && isGrounded)
+        if (Input.GetMouseButtonDown(0) && currentJumps < maxJumps)
         {
+            currentJumps++; // Increment the jump count
+
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
 
@@ -52,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
             float distance = Mathf.Clamp(Vector2.Distance(mousePosition, transform.position), 0, maxDistance);
             float jumpForce = baseJumpForce * (distance / maxDistance);
 
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // Reset vertical velocity
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
 
             // Trigger the jump animation
@@ -66,16 +76,22 @@ public class PlayerMovement : MonoBehaviour
 
     private System.Collections.IEnumerator DisableCollisionTemporarily()
     {
-        // Disable collision temporarily while jumping
-        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), true);
+        int playerLayer = gameObject.layer; // Player's layer
+        int groundLayerIndex = Mathf.RoundToInt(Mathf.Log(groundLayer.value, 2)); // Convert LayerMask to layer index
 
+        // Disable collisions between player and groundLayer
+        Physics2D.IgnoreLayerCollision(playerLayer, groundLayerIndex, true);
+
+        // Wait until the player's upward velocity becomes zero or negative
         while (rb.linearVelocity.y > 0)
         {
             yield return null;
         }
 
-        Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMaskToLayer(groundLayer), false);
+        // Re-enable collisions
+        Physics2D.IgnoreLayerCollision(playerLayer, groundLayerIndex, false);
     }
+
 
     private int LayerMaskToLayer(LayerMask layerMask)
     {
