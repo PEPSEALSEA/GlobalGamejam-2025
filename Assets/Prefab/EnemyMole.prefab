@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 9155002094733949116}
   - component: {fileID: 5859506862165264857}
   - component: {fileID: 2415869887568719688}
+  - component: {fileID: 8259648450878244846}
   - component: {fileID: 3116425215126871797}
   - component: {fileID: 3000653823837019534}
   m_Layer: 0
@@ -217,6 +218,19 @@ MonoBehaviour:
   attackDamage: 10
   redLine: {fileID: 3504476227065986179}
   lineDisplayDuration: 2
+--- !u!114 &8259648450878244846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6772282381601147115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bdcbb0312658234785d44cdf903d47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpForce: 10
 --- !u!50 &3116425215126871797
 Rigidbody2D:
   serializedVersion: 5
