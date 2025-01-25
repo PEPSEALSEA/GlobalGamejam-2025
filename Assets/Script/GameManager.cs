@@ -101,23 +101,31 @@ public class GameManager : MonoBehaviour
     {
         Vector3 originalScale = scoreText.transform.localScale;
 
-        scoreText.transform.DOScale(originalScale * 1.5f, 0.2f)
+        scoreText.transform.DOScale(originalScale * 1.8f, 0.3f)
+            .OnComplete(() =>
+            {
+                scoreText.transform.DOScale(originalScale, 0.3f);
+            });
+
+        Color originalColor = scoreText.color;
+        scoreText.DOColor(Color.red, 0.3f)
+            .OnComplete(() =>
+            {
+                scoreText.DOColor(originalColor, 0.3f);
+            });
+
+        scoreText.transform.DOShakePosition(0.3f, new Vector3(5f, 5f, 0), 10, 90);
+    }
+
+    void NormalScoreAnimation()
+    {
+        Vector3 originalScale = scoreText.transform.localScale;
+
+        scoreText.transform.DOScale(originalScale * 1.2f, 0.2f)
             .OnComplete(() =>
             {
                 scoreText.transform.DOScale(originalScale, 0.2f);
             });
-
-        Color originalColor = scoreText.color;
-        scoreText.DOColor(Color.yellow, 0.2f)
-            .OnComplete(() =>
-            {
-                scoreText.DOColor(originalColor, 0.2f);
-            });
-    }
-
-    public void AddHealth(int amount)
-    {
-        Debug.Log($"Health increased by {amount}!");
     }
 
     public void AddScore(int amount)
@@ -131,8 +139,19 @@ public class GameManager : MonoBehaviour
                 lastPopupScore = currentScore;
                 TriggerScorePopup();
             }
+            else
+            {
+                NormalScoreAnimation();
+            }
         }
     }
+
+
+    public void AddHealth(int amount)
+    {
+        Debug.Log($"Health increased by {amount}!");
+    }
+
 
     public void ToggleScoreAddition(bool allowScore)
     {
