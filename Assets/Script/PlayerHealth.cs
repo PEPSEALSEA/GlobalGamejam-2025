@@ -11,8 +11,14 @@ public class PlayerHealth : MonoBehaviour
     public float healthDecreaseRate = 1f;
     public float healthIncreaseAmount = 20f;
 
+    private Animator animator; // Reference to the Animator component
+    private PlayerMovement playerMovement; // Reference to PlayerMovement
+    private Rigidbody2D rb; // Reference to Rigidbody2D
+    private bool isDead = false; // Flag to track death state
+
     private void Awake()
     {
+        // Singleton setup
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -21,20 +27,42 @@ public class PlayerHealth : MonoBehaviour
         {
             Instance = this;
         }
+
+        // Get the Animator component
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogWarning("Animator component is missing on the player!");
+        }
+
+        // Get the PlayerMovement component
+        playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement == null)
+        {
+            Debug.LogWarning("PlayerMovement component is missing on the player!");
+        }
+
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogWarning("Rigidbody2D component is missing on the player!");
+        }
     }
 
     private void Start()
     {
+        // Initialize health values and UI
         currentHealth = maxHealth;
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
 
-        //InvokeRepeating("DecreaseHealthOverTime", 1f, 1f);
     }
 
     private void Update()
     {
-        if (currentHealth <= 0)
+        // Check if health reaches 0 and handle death
+        if (currentHealth <= 0 && !isDead)
         {
             currentHealth = 0;
             Die();
@@ -43,6 +71,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AddHealth(float amount)
     {
+        // Increase health and clamp it to the max value
         currentHealth += amount;
         if (currentHealth > maxHealth)
         {
@@ -53,8 +82,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void RemoveHealth(float amount)
     {
+        // Decrease health and prevent it from going below 0
         currentHealth -= amount;
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
         {
             currentHealth = 0;
         }
@@ -63,38 +93,59 @@ public class PlayerHealth : MonoBehaviour
 
     private void DecreaseHealthOverTime()
     {
+        // Reduce health periodically
         if (currentHealth > 0)
         {
             RemoveHealth(healthDecreaseRate);
         }
     }
 
-    private void UpdateHealthUI() //Finish don't fix
+    private void UpdateHealthUI()
     {
+        // Animate the health slider using DOTween
         healthSlider.DOValue(currentHealth, 0.5f).SetEase(Ease.InOutSine);
     }
 
     private void Die()
     {
         Debug.Log("Player has died!");
-        DOTween.To(() => CloudManager.Instance.cloudSpeed,
-           x => CloudManager.Instance.cloudSpeed = x,
-           -50,
-           0.5f)
-       .SetEase(Ease.InOutSine);
+
+        // Ensure this is executed only once
+        if (isDead) return;
+
+        isDead = true; // Set the death flag
+
+        // Trigger death animation
+        if (animator != null)
+        {
+            animator.SetBool("isDead", true);
+        }
+
+        // Disable PlayerMovement component
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false;
+        }
+
+        // Delete Rigidbody2D component
+        if (rb != null)
+        {
+            Destroy(rb);
+            Debug.Log("Rigidbody2D component removed.");
+        }
+
         GameManager.Instance.ToggleScoreAddition(false);
-        GameManager.Instance.UpdateScoreUIWithSlotEffect(GameManager.Instance.currentScore);
-        GameManager.Instance.SaveBestScore();
+        // Additional death logic can be added here
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Handle collision with health-increasing objects
         if (other.gameObject.CompareTag("Bubblegum"))
         {
             AddHealth(healthIncreaseAmount);
-            other.gameObject.SetActive(false);
-            //Destroy(other.gameObject);
-            //or playanim
+            other.gameObject.SetActive(false); // Deactivate the object
+            // Optionally, play a collection animation here
         }
     }
 }
