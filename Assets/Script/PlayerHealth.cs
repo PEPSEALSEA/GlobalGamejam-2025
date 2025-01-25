@@ -77,7 +77,12 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player has died!");
-        // Add player death
+        DOTween.To(() => CloudManager.Instance.cloudSpeed,
+           x => CloudManager.Instance.cloudSpeed = x,
+           -50,
+           0.5f)
+       .SetEase(Ease.InOutSine);
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
