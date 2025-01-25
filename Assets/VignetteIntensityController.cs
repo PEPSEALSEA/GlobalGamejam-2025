@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using DG.Tweening; // Import DOTween namespace
 
 public class VignetteIntensityController : MonoBehaviour
 {
@@ -24,22 +25,15 @@ public class VignetteIntensityController : MonoBehaviour
     {
         if (vignette != null)
         {
-            StartCoroutine(DecreaseIntensityOverTime(1f)); // Decrease over 1 second
+            float startIntensity = vignette.intensity.value;
+
+            // Use DOTween to animate the vignette intensity
+            DOTween.To(
+                () => vignette.intensity.value,  // Getter for the current intensity
+                x => vignette.intensity.Override(x),  // Setter for the intensity
+                0f,  // Target value
+                1f   // Duration (1 second)
+            ).SetEase(Ease.Linear); // Optional: Set an easing function
         }
-    }
-
-    private System.Collections.IEnumerator DecreaseIntensityOverTime(float duration)
-    {
-        float startIntensity = vignette.intensity.value;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            vignette.intensity.Override(Mathf.Lerp(startIntensity, 0f, elapsedTime / duration));
-            yield return null;
-        }
-
-        vignette.intensity.Override(0f); // Ensure it ends exactly at 0
     }
 }
