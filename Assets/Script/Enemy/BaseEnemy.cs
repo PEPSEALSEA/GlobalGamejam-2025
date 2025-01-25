@@ -30,8 +30,9 @@ public class BaseEnemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Mole Hit U");
+            Debug.Log(this.gameObject.name + ": Hit You");
             PlayerHealth.Instance.RemoveHealth(attackDamage);
+            GameManager.Instance.RemoveScore(50);
         }
     }
 }

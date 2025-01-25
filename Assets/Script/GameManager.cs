@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     private int displayedScore = 0;
     private int lastPopupScore = 0;
 
+    private bool canAddScore = true;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,11 +30,13 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+        gameObject.SetActive(false);
     }
 
     void Start()
     {
         StartCoroutine(AddScoreOverTime());
+        PlayerHealth.Instance.InvokeRepeating("DecreaseHealthOverTime", 1f, 1f);
     }
 
     IEnumerator AddScoreOverTime()
@@ -40,21 +44,25 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(timeInterval);
-            currentScore += scorePerInterval;
 
-            if (!DOTween.IsTweening("ScoreAnimation"))
+            if (canAddScore)
             {
-                DOTween.To(() => displayedScore, x =>
+                currentScore += scorePerInterval;
+
+                if (!DOTween.IsTweening("ScoreAnimation"))
                 {
-                    displayedScore = x;
-                    UpdateScoreUIWithSlotEffect(x);
-                }, currentScore, 0.5f).SetId("ScoreAnimation");
-            }
+                    DOTween.To(() => displayedScore, x =>
+                    {
+                        displayedScore = x;
+                        UpdateScoreUIWithSlotEffect(x);
+                    }, currentScore, 0.5f).SetId("ScoreAnimation");
+                }
 
-            if (currentScore >= lastPopupScore + 100)
-            {
-                lastPopupScore = currentScore;
-                TriggerScorePopup();
+                if (currentScore >= lastPopupScore + 100)
+                {
+                    lastPopupScore = currentScore;
+                    TriggerScorePopup();
+                }
             }
         }
     }
@@ -114,12 +122,53 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        currentScore += amount;
-
-        if (currentScore >= lastPopupScore + 100)
+        if (canAddScore)
         {
-            lastPopupScore = currentScore;
-            TriggerScorePopup();
+            currentScore += amount;
+
+            if (currentScore >= lastPopupScore + 100)
+            {
+                lastPopupScore = currentScore;
+                TriggerScorePopup();
+            }
         }
     }
+
+    public void ToggleScoreAddition(bool allowScore)
+    {
+        canAddScore = allowScore;
+    }
+
+    public void RemoveScore(int amount)
+    {
+        if (amount > currentScore)
+            amount = currentScore;
+
+        currentScore -= amount;
+
+        Vector3 originalScale = scoreText.transform.localScale;
+        Color originalColor = scoreText.color;
+
+        scoreText.transform.DOScale(originalScale * 0.8f, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.transform.DOScale(originalScale, 0.2f);
+            });
+
+        scoreText.DOColor(Color.red, 0.2f)
+            .OnComplete(() =>
+            {
+                scoreText.DOColor(originalColor, 0.2f);
+            });
+
+        if (!DOTween.IsTweening("ScoreAnimation"))
+        {
+            DOTween.To(() => displayedScore, x =>
+            {
+                displayedScore = x;
+                UpdateScoreUIWithSlotEffect(x);
+            }, currentScore, 0.5f).SetId("ScoreAnimation");
+        }
+    }
+
 }

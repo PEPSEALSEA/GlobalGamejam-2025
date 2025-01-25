@@ -29,7 +29,7 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
 
-        InvokeRepeating("DecreaseHealthOverTime", 1f, 1f);
+        //InvokeRepeating("DecreaseHealthOverTime", 1f, 1f);
     }
 
     private void Update()
@@ -82,7 +82,7 @@ public class PlayerHealth : MonoBehaviour
            -50,
            0.5f)
        .SetEase(Ease.InOutSine);
-
+        GameManager.Instance.ToggleScoreAddition(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
