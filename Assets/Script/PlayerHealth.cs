@@ -259,9 +259,8 @@ public class PlayerHealth : MonoBehaviour
         transform.SetParent(null);
 
         targetObject.gameObject.SetActive(false);
-        //yield return targetObject.DOScale(Vector3.zero, 0.5f).WaitForCompletion();
 
-        //Destroy(targetObject.gameObject);
+        Destroy(targetObject.gameObject);
     }
 
     private IEnumerator playStartSound()
