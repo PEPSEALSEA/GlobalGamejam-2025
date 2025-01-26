@@ -124,7 +124,7 @@ public class PlayerHealth : MonoBehaviour
         // Animate the health slider using DOTween
         healthSlider.DOValue(currentHealth, 0.5f).SetEase(Ease.InOutSine);
     }
-    private void Die()
+    public void Die()
     {
         Debug.Log("Player has died!");
 
