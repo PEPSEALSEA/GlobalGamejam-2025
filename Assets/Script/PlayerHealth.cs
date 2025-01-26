@@ -34,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
     [Header("Audio")]
     public AudioSource intoBubble;
     public AudioSource windBubble;
+    public AudioSource popBubble;
 
     private void Awake()
     {
@@ -218,6 +219,7 @@ public class PlayerHealth : MonoBehaviour
 
     public IEnumerator ApplySpeedBoost()
     {
+        StartCoroutine(playStartSound());
         originalGravityState = playerRigidbody.gravityScale > 0;
         playerRigidbody.gravityScale = 0;
         playerRigidbody.linearVelocity = Vector2.zero;
@@ -259,6 +261,8 @@ public class PlayerHealth : MonoBehaviour
         transform.SetParent(null);
 
         targetObject.gameObject.SetActive(false);
+
+        popBubble.Play();
 
         Destroy(targetObject.gameObject);
     }
