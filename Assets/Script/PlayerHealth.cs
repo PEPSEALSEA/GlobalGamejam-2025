@@ -6,13 +6,14 @@ using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public GameObject deeadscene;
     public static PlayerHealth Instance { get; private set; } // Singleton
     public Slider healthSlider;
     public float maxHealth = 100f;
     public float currentHealth;
     public float healthDecreaseRate = 1f;
     public float healthIncreaseAmount = 20f;
-    public PlayableDirector timeline; // Public variable for timeline
+    public PlayableDirector timelineDirector; // Public variable for timeline
 
 
     private Animator animator; // Reference to the Animator component
@@ -119,59 +120,72 @@ public class PlayerHealth : MonoBehaviour
         // Animate the health slider using DOTween
         healthSlider.DOValue(currentHealth, 0.5f).SetEase(Ease.InOutSine);
     }
-
-private void Die()
-{
-    Debug.Log("Player has died!");
-
-    // Ensure this is executed only once
-    if (isDead) return;
-    isDead = true; // Set the death flag
-
-    // Trigger death animation
-    if (animator != null)
+    private void Die()
     {
-        animator.SetTrigger("Dead");
-        animator.SetBool("isDead", true);
-    }
+        Debug.Log("Player has died!");
 
-    // Disable PlayerMovement component
-    if (playerMovement != null)
-    {
-        playerMovement.enabled = false;
-    }
+        // Ensure this is executed only once
+        if (isDead) return;
+        isDead = true;
 
-    // Delete Rigidbody2D component
-    if (rb != null)
-    {
-        Destroy(rb);
-        Debug.Log("Rigidbody2D component removed.");
-    }
-
-    // Stop adding scores
-    GameManager.Instance.ToggleScoreAddition(false);
-
-    // Stop cloud movement
-    CloudManager.Instance.cloudSpeed = 0f;
-
-    // Delay 2 seconds, then play the timeline
-    DOVirtual.DelayedCall(2f, PlayTimeline);
-}
-
-    private void PlayTimeline()
-    {
-        Debug.Log("Play timeline");
-        if (timeline != null)
+        // Trigger death animation
+        if (animator != null)
         {
-            timeline.Play();
+            animator.SetTrigger("Dead");
+            animator.SetBool("isDead", true);
         }
-        else
+
+        // Disable PlayerMovement component
+        if (playerMovement != null)
         {
-            Debug.LogWarning("No PlayableDirector assigned to play the timeline.");
+            playerMovement.enabled = false;
         }
+
+        // Delete Rigidbody2D component
+        if (rb != null)
+        {
+            Destroy(rb);
+            Debug.Log("Rigidbody2D component removed.");
+        }
+
+        // Stop adding scores
+        GameManager.Instance.ToggleScoreAddition(false);
+
+        // Stop cloud movement
+        CloudManager.Instance.cloudSpeed = 0f;
+
+        // Rotate and move after a 2-second delay
+        Transform playerTransform = transform;
+        Vector3 targetRotation = new Vector3(0f, 0f, 90f);
+        Vector3 targetPosition = playerTransform.position + new Vector3(0f, -15f, 0f);
+
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            // Move down and rotate over 5 seconds
+            playerTransform
+                .DOMove(targetPosition, 5f)
+                .SetEase(Ease.InOutQuad);
+
+            playerTransform
+                .DORotate(targetRotation, 5f)
+                .SetEase(Ease.InOutQuad)
+                .OnComplete(() =>
+                {
+                    deeadscene.SetActive(true);
+                    // // Play the timeline
+                    // if (timelineDirector != null)
+                    // {
+                    //     timelineDirector.Play();
+                    //     Debug.Log("Timeline is now playing.");
+
+                    // }
+                    // else
+                    // {
+                    //     Debug.LogWarning("PlayableDirector is not assigned!");
+                    // }
+                });
+        });
     }
-
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Bubblegum"))
