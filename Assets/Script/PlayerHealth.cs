@@ -254,10 +254,9 @@ public class PlayerHealth : MonoBehaviour
 
         transform.SetParent(null);
 
-        targetObject.DOScale(Vector3.zero, 0.5f)
-        .OnComplete(() =>
-        {
-            Destroy(targetObject.gameObject);
-        });
+        targetObject.gameObject.SetActive(false);
+        //yield return targetObject.DOScale(Vector3.zero, 0.5f).WaitForCompletion();
+
+        //Destroy(targetObject.gameObject);
     }
 }
