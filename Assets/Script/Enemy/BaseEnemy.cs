@@ -1,5 +1,3 @@
-using NUnit.Framework.Interfaces;
-using UnityEditor.Overlays;
 using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour
