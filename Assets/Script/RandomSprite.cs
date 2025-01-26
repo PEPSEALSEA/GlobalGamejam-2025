@@ -1,22 +1,25 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class RandomSpriteOnEnable : MonoBehaviour
+public class RandomImageOnEnable : MonoBehaviour
 {
     // List of sprites to choose from
     public Sprite[] sprites;
 
-    // Reference to the SpriteRenderer component
-    private SpriteRenderer spriteRenderer;
+    // Reference to the Image component
+    private Image imageComponent;
+    public GameObject disabledd;
 
     private void Awake()
     {
-        // Get the SpriteRenderer component
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        disabledd.SetActive(false);
+        // Get the Image component
+        imageComponent = GetComponent<Image>();
 
-        // Check if the SpriteRenderer exists
-        if (spriteRenderer == null)
+        // Check if the Image component exists
+        if (imageComponent == null)
         {
-            Debug.LogError("No SpriteRenderer found on this GameObject.");
+            Debug.LogError("No Image component found on this GameObject.");
         }
     }
 
@@ -27,7 +30,7 @@ public class RandomSpriteOnEnable : MonoBehaviour
         {
             // Choose a random sprite from the list
             int randomIndex = Random.Range(0, sprites.Length);
-            spriteRenderer.sprite = sprites[randomIndex];
+            imageComponent.sprite = sprites[randomIndex];
         }
         else
         {
@@ -35,4 +38,3 @@ public class RandomSpriteOnEnable : MonoBehaviour
         }
     }
 }
-
