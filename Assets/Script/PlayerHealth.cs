@@ -31,6 +31,10 @@ public class PlayerHealth : MonoBehaviour
     private Collider2D playerCollider;
     private bool originalGravityState;
 
+    [Header("Audio")]
+    public AudioSource intoBubble;
+    public AudioSource windBubble;
+
     private void Awake()
     {
         // Singleton setup
@@ -258,5 +262,12 @@ public class PlayerHealth : MonoBehaviour
         //yield return targetObject.DOScale(Vector3.zero, 0.5f).WaitForCompletion();
 
         //Destroy(targetObject.gameObject);
+    }
+
+    private IEnumerator playStartSound()
+    {
+        intoBubble.Play();
+        yield return new WaitForSeconds(1f);
+        windBubble.Play();
     }
 }

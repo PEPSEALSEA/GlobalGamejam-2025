@@ -3647,14 +3647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5577573856146899491, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7746355511609784130, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 7122670544728153411, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
+      propertyPath: objectToSpawn
+      value: 
+      objectReference: {fileID: 712855521}
     - target: {fileID: 7746355511609784130, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
       propertyPath: 'enemyObject.Array.data[0]'
       value: 
@@ -3663,6 +3659,10 @@ PrefabInstance:
       propertyPath: 'enemyObject.Array.data[1]'
       value: 
       objectReference: {fileID: 2029625895}
+    - target: {fileID: 7802703477405781331, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
+      propertyPath: objectToSpawn
+      value: 
+      objectReference: {fileID: 1592866400}
     - target: {fileID: 8543397281766353591, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.3908825
@@ -3703,70 +3703,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8829088289613682928, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      propertyPath: 'cloudPrefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 4427133151131087005, guid: 6ec73bb4a376d46cd9d635100085365b, type: 3}
-    - target: {fileID: 8829088289613682928, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      propertyPath: 'cloudPrefabs.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2270611126202916211, guid: 0034bb3de12b346d08b8795fc12febc9, type: 3}
-    - target: {fileID: 8829088289613682928, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      propertyPath: 'cloudPrefabs.Array.data[2]'
-      value: 
-      objectReference: {fileID: 6202312318695521255, guid: 5348bb7182aaa4a60a4d3346c64bb1ed, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5577573856146899491, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1826825032}
-    - targetCorrespondingSourceObject: {fileID: 5577573856146899491, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1826825038}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
 --- !u!1 &1826825026 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5577573856146899491, guid: 8bc8e2c98b3967e428b229ff56387419, type: 3}
   m_PrefabInstance: {fileID: 1826825025}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1826825032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826825026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 708488d22769ee345b376be38a3cf0c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 712855521}
-  spawnAreaMin: {x: -1.9, y: 4.15}
-  spawnAreaMax: {x: 1.89, y: -4.05}
-  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
-  minSec: 10
-  maxSec: 20
---- !u!114 &1826825038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826825026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 708488d22769ee345b376be38a3cf0c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 1592866400}
-  spawnAreaMin: {x: -1.33, y: 3.38}
-  spawnAreaMax: {x: 1.19, y: -3.22}
-  gizmoColor: {r: 1, g: 0, b: 0.5606532, a: 1}
-  minSec: 30
-  maxSec: 60
 --- !u!1 &1849111325
 GameObject:
   m_ObjectHideFlags: 0

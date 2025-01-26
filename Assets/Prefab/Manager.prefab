@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 5399880552037927995}
   - component: {fileID: 8829088289613682928}
   - component: {fileID: 1373895944465132120}
+  - component: {fileID: 7122670544728153411}
+  - component: {fileID: 7802703477405781331}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -81,9 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cloudPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4427133151131087005, guid: 6ec73bb4a376d46cd9d635100085365b, type: 3}
+  - {fileID: 2270611126202916211, guid: 0034bb3de12b346d08b8795fc12febc9, type: 3}
+  - {fileID: 6202312318695521255, guid: 5348bb7182aaa4a60a4d3346c64bb1ed, type: 3}
   initialCloudCount: 14
   minYDistance: 1
   maxYDistance: 2.3
@@ -102,3 +104,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalVolume: {fileID: 0}
+--- !u!114 &7122670544728153411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577573856146899491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 708488d22769ee345b376be38a3cf0c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 0}
+  spawnAreaMin: {x: -1.9, y: 4.15}
+  spawnAreaMax: {x: 1.89, y: -4.05}
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  minSec: 10
+  maxSec: 20
+--- !u!114 &7802703477405781331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577573856146899491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 708488d22769ee345b376be38a3cf0c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 0}
+  spawnAreaMin: {x: -1.33, y: 3.38}
+  spawnAreaMax: {x: 1.19, y: -3.22}
+  gizmoColor: {r: 1, g: 0, b: 0.5606532, a: 1}
+  minSec: 30
+  maxSec: 60
