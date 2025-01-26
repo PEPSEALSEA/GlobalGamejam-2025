@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private int currentJumps = 0; // Track current jumps
     private bool isGrounded;
 
+    public AudioSource jumpSound;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         // Jump logic
         if (Input.GetMouseButtonDown(0) && currentJumps < maxJumps)
         {
+            jumpSound.Play();
             currentJumps++; // Increment the jump count
 
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
