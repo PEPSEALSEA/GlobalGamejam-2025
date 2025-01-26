@@ -128,6 +128,8 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player has died!");
+        GameManager.Instance.SaveBestScore();
+        UpdateHealthUI();
 
         // Ensure this is executed only once
         if (isDead) return;
