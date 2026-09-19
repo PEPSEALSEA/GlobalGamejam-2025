@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
             float distance = Mathf.Clamp(Vector2.Distance(mousePosition, transform.position), 0, maxDistance);
             float jumpForce = baseJumpForce * (distance / maxDistance);
 
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // Reset vertical velocity
+            rb.velocity = new Vector2(rb.velocity.x, 0); // Reset vertical velocity
             rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
 
             // Trigger the jump animation
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         Physics2D.IgnoreLayerCollision(playerLayer, groundLayerIndex, true);
 
         // Wait until the player's upward velocity becomes zero or negative
-        while (rb.linearVelocity.y > 0)
+        while (rb.velocity.y > 0)
         {
             yield return null;
         }

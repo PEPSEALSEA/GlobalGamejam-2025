@@ -12,7 +12,7 @@ public class JumpPad : MonoBehaviour
 
             if (playerRb != null)
             {
-                playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, jumpForce);
+                playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce);
             }
         }
     }

@@ -224,7 +224,7 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(playStartSound());
         originalGravityState = playerRigidbody.gravityScale > 0;
         playerRigidbody.gravityScale = 0;
-        playerRigidbody.linearVelocity = Vector2.zero;
+        playerRigidbody.velocity = Vector2.zero;
         playerRigidbody.isKinematic = true;
         playerCollider.enabled = false;
 
